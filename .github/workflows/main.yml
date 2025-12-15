@@ -1,35 +1,30 @@
-name: Build e Push su GHCR
-
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:  # Per build manuali
-
+name: Build Docker GHCR
+on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write  # Necessario per GHCR
-
+      packages: write
     steps:
     - uses: actions/checkout@v4
-
-    - name: Login a GHCR
-      uses: docker/login-action@v3
+    
+    - name: Converti in minuscolo  # ← AGGIUNGI QUESTO
+      run: |
+        echo "OWNER_LC=${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+        echo "REPO_LC=${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+    
+    - uses: docker/login-action@v3
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build e Push
-      uses: docker/build-push-action@v6
+    
+    - uses: docker/build-push-action@v6
       with:
         context: .
-        platforms: linux/amd64,linux/arm64  # Multi-arch per HA
+        platforms: linux/amd64,linux/arm64
         push: ${{ github.event_name != 'pull_request' }}
         tags: |
-          ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
-          ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.ref_name }}
+          ghcr.io/${{ env.OWNER_LC }}/${{ env.REPO_LC }}:latest
+          ghcr.io/${{ env.OWNER_LC }}/${{ env.REPO_LC }}:${{ github.ref_name }}
