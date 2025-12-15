@@ -17,7 +17,7 @@
     "n8n/.n8n/crash.journal",
     "supervisord.log*"
   ],
-  "image": "ghcr.io/Invernomut0/hass-n8n-{arch}",
+  "image": "ghcr.io/Invernomut0/hass-n8n-aarch64",
   "startup": "application",
   "boot": "auto",
   "icon": "icon.png",
