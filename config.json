@@ -3,7 +3,7 @@
   "version": "2.0.2",
   "slug": "hass-n8n",
   "description": "Self host your n8n instance",
-  "url": "https://github.com/Rbillon59/hass-n8n",
+  "url": "https://github.com/Invernomut0/hass-n8n",
   "hassio_api": true,
   "hassio_role": "default",
   "homeassistant_api": true,
@@ -17,7 +17,7 @@
     "n8n/.n8n/crash.journal",
     "supervisord.log*"
   ],
-  "image": "ghcr.io/rbillon59/hass-n8n-{arch}",
+  "image": "ghcr.io/Invernomut0/hass-n8n-{arch}",
   "startup": "application",
   "boot": "auto",
   "icon": "icon.png",
